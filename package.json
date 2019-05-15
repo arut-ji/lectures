@@ -1,0 +1,12 @@
+{
+  "name": "lectures",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev",
+    "build": "vuepress build"
+  },
+  "author": "Arut Jinadit",
+  "license": "ISC"
+}
