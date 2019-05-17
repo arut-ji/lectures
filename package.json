@@ -8,5 +8,8 @@
     "build": "vuepress build"
   },
   "author": "Arut Jinadit",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vuepress": "^0.14.11"
+  }
 }
