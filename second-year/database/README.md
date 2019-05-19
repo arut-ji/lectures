@@ -3,7 +3,9 @@
 This is an assignment on the subject; Information Systems and Databases. In this assignment, 
 Firebase Cloud Firestore is selected to be compared with SQL database.
 
-## Firebase Cloud Firestore
+## Introduction to Cloud Firestore
+
+### Firebase Cloud Firestore
 According to Cloud Firestore documentation site, it is a flexible, scalable database for mobile, web and 
 server development from Google's Firebase and Google Cloud Platform (GCP). Moreover, the Cloud Firestore
 provides syncing functionality to client apps through real-time listeners and as well as offers offline support
@@ -62,7 +64,24 @@ in SQL which contains facts. Since the Cloud Firestore is schemaless, document f
 even they are in the same collection but using the same structure for documents which are contained in the same collection
 is suggested in order to perform easier document querying.
 
- 
+## Features Comparison
+In the next topic, we will be discussing on Cloud Firestore features in compare with SQL features.
+These following topics will be focused.
+- Selecting all or particular columns from one table [todo] 
+- Selecting specified rows from on a table [todo]
+- Built-in functions [todo]
+- Calculations [todo]
+- The grouping feature [todo]
+- Selecting columns and rows from several tables [todo]
+- Subqueries [todo]
+- Use more than one copy of a table [todo] 
+- Correlated subqueries [todo]
+- Subqueries with testing for existence [todo]
+- Views [todo]
+
+
+
+
 
  
 
