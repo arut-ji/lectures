@@ -67,7 +67,8 @@ is suggested in order to perform easier document querying.
 ## Features Comparison
 In the next topic, we will be discussing on Cloud Firestore features in compare with SQL features.
 These following topics will be focused.
-- Selecting all or particular columns from one table [todo] 
+
+- Selecting all or particular columns from one table
 - Selecting specified rows from on a table [todo]
 - Built-in functions [todo]
 - Calculations [todo]
@@ -79,11 +80,79 @@ These following topics will be focused.
 - Subqueries with testing for existence [todo]
 - Views [todo]
 
+Basically when performing queries in Cloud Firestore, a reference to the specific a document or a collection
+has to be identified. Then, we use a identified-reference to query. 
 
+### Selecting all or particular columns from one table
+For querying all attributes from documents, it can be done easily.
 
+```javascript
+//Create a reference to the "president" collection 
+const presidentRef = db.collection("president")
 
+//Perform documents query
+const query = presidentRef.get()
+```
 
- 
+For querying with Firestore, it cannot select particular columns in the documents. It has to be done 
+in the application logical business. 
 
+```javascript
+//Create a reference to the "president" collection
+const presidentRef = db.collection("president")
 
+//Perform documents query
+const query = presidentRef.get()
 
+//Filter the required-attributes from each document using Javascript
+const result = query.then( (snapshot) => {
+    return snapshot.map(document => {
+        const data = document.data()
+        return {
+            id: document.id,
+            data: {
+                'pres_name': data['pres_name'],
+                'birth_year': data['birth_year']
+            }
+        }
+    })
+})
+```
+
+For ``ORDER BY`` feature in SQL, it can be done in Cloud Firestore as in this example.
+
+```javascript
+//Create a reference to the "president" collection
+const presidentRef = db.collection("president")
+
+//Perform documents query with "order by" in ascending order 
+const query = presidentRef.orderBy('pres_name').get()
+
+//Perform documents query with "order by" in descending order 
+const query = presidentRef.orderBy('pres_name', 'desc').get()
+```
+
+### Selecting specified rows from one a table
+In Cloud Firestore manner, it would be said as selecting specified document from a collection.
+For operations which are using in Firestore query, those are similar to operations in SQL.
+These following operations are supported:
+
+- equal to (==)
+- greater than or equal to (>=)
+- less than or equal to(<=) 
+- greater then (>)
+- less than (>)
+
+But in contrast, Firestore doesn't support ``OR`` logical operation. When the ``AND`` logical operation
+is needed, it can be done using this following code-snippet as well as ``LIKE`` operation, it is not yet 
+support.
+
+```javascript
+//Create a reference to "president" collection
+const presidentRef = db.collection("president")
+
+//Perform documents query with "where" clause
+const query = presidentRef
+                    .where("state_born","==","Missouri")
+                    .where("death_age","<=","80")
+```
