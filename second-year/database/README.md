@@ -285,7 +285,7 @@ However, Cloud Firestore is very flexible according to its schema-less character
 Moreover, most of the calculations are delegated to the application side which may produce more complexity in the application's code. 
 
 In conclusion, Firestore is great for developing an application with a short period of time. But it will produce the technical debt
-in the technical development as well due to its schema-less behavior. Therefore, Cloud Firestore could be used with SQL database 
+in the technical development as well, due to its schema-less behavior. Therefore, Cloud Firestore could be used with SQL database 
 to ensure the data integrity. Moreover, with Cloud Firestore real-time and offline-supported feature, it would empower
 SQL to have more capability in working with users whose network connectivity is low and let data be synced across devices.
    
