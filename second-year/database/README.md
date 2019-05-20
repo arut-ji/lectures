@@ -69,13 +69,13 @@ In the next topic, we will be discussing on Cloud Firestore features in compare 
 These following topics will be focused.
 
 - Selecting all or particular columns from one table
-- Selecting specified rows from on a table [todo]
-- Built-in functions [todo]
-- Calculations [todo]
-- The grouping feature [todo]
-- Selecting columns and rows from several tables [todo]
-- Subqueries [todo]
-- Use more than one copy of a table [todo] 
+- Selecting specified rows from on a table 
+- Built-in functions 
+- Calculations 
+- The grouping feature 
+- Selecting columns and rows from several tables 
+- Subqueries 
+- Use more than one copy of a table  
 - Correlated subqueries [todo]
 - Subqueries with testing for existence [todo]
 - Views [todo]
@@ -145,7 +145,7 @@ These following operations are supported:
 
 But in contrast, Firestore doesn't support ``OR`` logical operation. When the ``AND`` logical operation
 is needed, it can be done using this following code-snippet as well as ``LIKE`` operation, it is not yet 
-support.
+support.-
 
 ```javascript
 //Create a reference to "president" collection
@@ -156,3 +156,73 @@ const query = presidentRef
                     .where("state_born","==","Missouri")
                     .where("death_age","<=","80")
 ```
+
+### Built-in functions
+For SQL built-in functions like ``AVG``, ``SUM``, ``MIN`` and etc., those are not implemented in Cloud Firestore. To do so, 
+we needs to implement those functions as one of the business logic in the application. For example, the ``COUNT`` function 
+can be simply implemented using the following code-fragment.
+
+```javascript
+//Create a reference to "president" collection
+const presidentRef = db.collection("president")
+
+//Perform documents query.
+const count = presidentRef.get()
+                .then(snapshot => snapshot.docs.length)
+``` 
+
+### Calculation
+In SQL,  there arithmetic calculation functions to be used with numeric data types. 
+However, Cloud Firestore does not provide those. Developers have to do so in the application business logic.
+To illustrate more, we show to find the average of presidents age. 
+
+```javascript
+//Create a reference to "president" collection
+const presidentRef = db.collection("president")
+
+//Perform documents query.
+const query = presidentRef.get()
+const average = query.then(snapshot => {
+    const count = snapshot.docs.length
+    const sum = snapshot.docs.reduce((currentResult, nextNumber) => currentResult + nextNumber, 0)
+    return sum / count
+})
+```
+
+### The grouping feature
+In Cloud Firestore, it does not have such feature. You have to implement it yourself.
+
+### Selecting columns and rows from several tables tables: Joining
+Joining in Cloud Firestore does not exist. Alternatively, when designing collections which are related, duplicating data is suggested.
+For example, in SQL when a user orders some food, it may use three tables; User, Food, Order. Then, when a list of food's prices that are
+contained in the order is needed, it can be obtained by using some SQL join. In contrast, Firestore document suggests that 
+, in this case, you may have three collections but documents in the order collection may contain some necessary field from a user and 
+foods that are associated with it. 
+
+### Subqueries
+For subqueries, Firestore does not have any particular method to support. However, it can be done by query each demand separately.
+For instance, to list all document about those marriages which have more than the average children could be done by the following snippet.
+
+```javascript
+const marriageRef = db.collection("pres_marriage")
+const marriagesHavingChildrenAboveAverage = marriageRef.get()
+                   .then(snapshot => {
+                       //Get total number of marriages.
+                       const numberOfMarriages = snapshot.docs.length
+                       //Get an average number of children in all marriages.
+                       const averageChildren = snapshot.docs.reduce((currentSum, nextNumber) => {
+                           return currentSum + nextNumber
+                       }, 0) / numberOfMarriages
+                       //Filter out documents which have the number of children less than or equal to the average. 
+                       return snapshot.docs.filter((marriageDoc) => marriageDoc["nr_children"] > averageChildren)
+                   })
+```    
+
+### Use of more than one copy of a table
+For this feature, as in Firestore does not support the subquerying feature, this feature is not included as well. 
+As an alternative, it can be done similar to the example in the subqueries section.
+
+### Correlated subqueries
+
+
+
