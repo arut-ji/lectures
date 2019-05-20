@@ -105,16 +105,18 @@ const presidentRef = db.collection("president")
 const query = presidentRef.get()
 
 //Filter the required-attributes from each document using Javascript
-const result = query.then( (snapshot) => {
-    return snapshot.map(document => {
-        const data = document.data()
-        return {
-            id: document.id,
-            data: {
-                'pres_name': data['pres_name'],
-                'birth_year': data['birth_year']
+const result = (async () => {
+    return await query.then( (snapshot) => {
+        return snapshot.map(document => {
+            const data = document.data()
+            return {
+                id: document.id,
+                data: {
+                    'pres_name': data['pres_name'],
+                    'birth_year': data['birth_year']
+                }
             }
-        }
+        })
     })
 })
 ```
@@ -167,8 +169,9 @@ can be simply implemented using the following code-fragment.
 const presidentRef = db.collection("president")
 
 //Perform documents query.
-const count = presidentRef.get()
-                .then(snapshot => snapshot.docs.length)
+const count = (async () => {
+    return await presidentRef.get().then(snapshot => snapshot.docs.length)
+})()
 ``` 
 
 ### Calculation
@@ -182,10 +185,12 @@ const presidentRef = db.collection("president")
 
 //Perform documents query.
 const query = presidentRef.get()
-const average = query.then(snapshot => {
-    const count = snapshot.docs.length
-    const sum = snapshot.docs.reduce((currentResult, nextNumber) => currentResult + nextNumber, 0)
-    return sum / count
+const average = (async () => {
+    return await query.then(snapshot => {
+        const count = snapshot.docs.length
+        const sum = snapshot.docs.reduce((currentResult, nextNumber) => currentResult + nextNumber, 0)
+        return sum / count
+    })
 })
 ```
 
@@ -204,18 +209,22 @@ For subqueries, Firestore does not have any particular method to support. Howeve
 For instance, to list all document about those marriages which have more than the average children could be done by the following snippet.
 
 ```javascript
+//Create a marriage collection reference
 const marriageRef = db.collection("pres_marriage")
-const marriagesHavingChildrenAboveAverage = marriageRef.get()
-                   .then(snapshot => {
-                       //Get total number of marriages.
-                       const numberOfMarriages = snapshot.docs.length
-                       //Get an average number of children in all marriages.
-                       const averageChildren = snapshot.docs.reduce((currentSum, nextNumber) => {
-                           return currentSum + nextNumber
-                       }, 0) / numberOfMarriages
-                       //Filter out documents which have the number of children less than or equal to the average. 
-                       return snapshot.docs.filter((marriageDoc) => marriageDoc["nr_children"] > averageChildren)
-                   })
+//Find documents which meet the criteria
+const marriagesHavingChildrenAboveAverage = (async () => {
+    return await marriageRef.get()
+            .then(snapshot => {
+                //Get total number of marriages.
+                const numberOfMarriages = snapshot.docs.length
+                //Get an average number of children in all marriages.
+                const averageChildren = snapshot.docs.reduce((currentSum, nextNumber) => {
+                    return currentSum + nextNumber
+                }, 0) / numberOfMarriages
+                //Filter out documents which have the number of children less than or equal to the average. 
+                return snapshot.docs.filter((marriageDoc) => marriageDoc["nr_children"] > averageChildren)
+            })
+})()
 ```    
 
 ### Use of more than one copy of a table
@@ -223,6 +232,46 @@ For this feature, as in Firestore does not support the subquerying feature, this
 As an alternative, it can be done similar to the example in the subqueries section.
 
 ### Correlated subqueries
+As we have discussed earlier, Cloud Firestore does not support the subquerying feature as well as the aggregation functions. 
+Hence, when a developer has to perform a query as same as in SQL which requires correlated subqueries, it has to be done
+with a helping of client-sided business logic.
 
+### Subqueries with test for existence
+As a consequence for not having subqueries as one of the features, this demand will be delegated to the client side.
+To illustrate, listing the names and ages at death of all presidents who married can be accomplished by this code-fragment.
+
+```javascript
+//Create a reference to the marriage collection
+const marriageRef = db.collection("pres_marriage")
+
+//Get all documents in the marriage collection
+const marriageDocs = (async () => {
+    return await marriageRef.get().then(snapshot => snapshot.docs)
+})()
+
+//Create a reference to the president collection
+const presidentRef = db.collection("president")
+
+//Get married presidents
+const marriagedPresident = (async () => {
+    //Get the latest snapshot from Firestore
+    return await presidentRef.get().then(snapshot => {
+        //Filter out documents from president who does not appear in the marriage collection.
+        return snapshot.docs.filter(presidentDoc => {
+            const presNameList = marriageDocs.map(doc => doc.data()['pres_name'])
+            return presNameList.includes(presidentDoc.data()['pres_name'])
+        })  
+    })
+})()
+```
+
+### Views
+In Firestore, it does have something similar to this. As shown above in the previous section, documents in a collection
+can be queried first and then, be used in another document query as well. 
+
+## Conclusion
+For rapid application development, using Firestore may shorten the development time by reducing server side and database set up.
+Hence, developers just use Cloud Firestore SDK like plug-and-play with their application. Developers can also define shallow integrity rules
+within Firestore collections by defining [security rules](https://firebase.google.com/docs/firestore/security/get-started).   
 
 
