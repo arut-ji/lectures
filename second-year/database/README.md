@@ -112,7 +112,7 @@ const query = presidentRef.get()
 //Filter the required-attributes from each document using Javascript
 const result = (async () => {
     return await query.then( (snapshot) => {
-        return snapshot.map(document => {
+        return snapshot.docs.map(document => {
             const data = document.data()
             return {
                 id: document.id,
@@ -123,7 +123,7 @@ const result = (async () => {
             }
         })
     })
-})
+})()
 ```
 
 For ``ORDER BY`` feature in SQL, it can be done in Cloud Firestore as in this example.
@@ -196,7 +196,7 @@ const average = (async () => {
         const sum = snapshot.docs.reduce((currentResult, nextNumber) => currentResult + nextNumber, 0)
         return sum / count
     })
-})
+})()
 ```
 
 ### The grouping feature
