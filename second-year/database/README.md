@@ -81,9 +81,9 @@ These following topics will be focused.
 - Selecting columns and rows from several tables 
 - Subqueries 
 - Use more than one copy of a table  
-- Correlated subqueries [todo]
-- Subqueries with testing for existence [todo]
-- Views [todo]
+- Correlated subqueries 
+- Subqueries with testing for existence 
+- Views 
 
 Basically when performing queries in Cloud Firestore, a reference to the specific a document or a collection
 has to be identified. Then, we use a identified-reference to query. 
