@@ -3,6 +3,11 @@
 This is an assignment on the subject; Information Systems and Databases. In this assignment, 
 Firebase Cloud Firestore is selected to be compared with SQL database.
 
+#### Group Members
+- Arut Jinadit 60090002
+- Pasuta Paopun 60090025
+- Napop Soontrapong 60090019
+
 ## Introduction to Cloud Firestore
 
 ### Firebase Cloud Firestore
@@ -271,7 +276,18 @@ can be queried first and then, be used in another document query as well.
 
 ## Conclusion
 For rapid application development, using Firestore may shorten the development time by reducing server side and database set up.
-Hence, developers just use Cloud Firestore SDK like plug-and-play with their application. Developers can also define shallow integrity rules
-within Firestore collections by defining [security rules](https://firebase.google.com/docs/firestore/security/get-started).   
+Hence, developers just use Cloud Firestore SDK plug-and-play with their application. Developers can also define shallow integrity rules
+within Firestore collections by defining [security rules](https://firebase.google.com/docs/firestore/security/get-started). Thus, Cloud Firestore has 
+real-time listeners to let the application has the same set of data across devices as well as the offline-supported feature 
+to allow the application to be working seamlessly with low network connectivity. 
+
+However, Cloud Firestore is very flexible according to its schema-less characteristic. Therefore, data duplications are allowed.
+Moreover, most of the calculations are delegated to the application side which may produce more complexity in the application's code. 
+
+In conclusion, Firestore is great for developing an application with a short period of time. But it will produce the technical debt
+in the technical development as well due to its schema-less behavior. Therefore, Cloud Firestore could be used with SQL database 
+to ensure the data integrity. Moreover, with Cloud Firestore real-time and offline-supported feature, it would empower
+SQL to have more capability in working with users whose network connectivity is low and let data be synced across devices.
+   
 
 
